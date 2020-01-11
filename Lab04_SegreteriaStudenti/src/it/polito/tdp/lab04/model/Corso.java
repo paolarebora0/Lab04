@@ -74,7 +74,7 @@ public class Corso {
 
 	@Override
 	public String toString() {
-		return String.format("Corso [%s, %s, %s crediti, pd %s]", codins, nome, crediti, pd);
+		return String.format("%s    %s    %s   pd %s", codins, crediti, nome, pd);
 	}
 	
 	

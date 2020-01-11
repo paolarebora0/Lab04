@@ -74,7 +74,7 @@ public class Studente {
 
 	@Override
 	public String toString() {
-		return String.format("Studente [%s, %s, %s, %s]", matricola, nome, cognome, CDS);
+		return String.format("Studente:  %s,   %s,   %s", matricola, nome, cognome);
 	}
 
 	

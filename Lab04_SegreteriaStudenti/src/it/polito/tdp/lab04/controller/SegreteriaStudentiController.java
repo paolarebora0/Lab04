@@ -68,14 +68,57 @@ public class SegreteriaStudentiController {
 		comboCorso.getItems().addAll(corsi);
 	}
 
+    /**
+     * Trova tutti i corsi a cui è iscritta la matricola selezionata
+     * 
+     * @param event
+     */
     @FXML
     void doCercaCorsi(ActionEvent event) {
-
+    	txtResult.clear();
+    	
+    	int matricola;
+    	try {
+			matricola = Integer.parseInt(txtMatricola.getText());
+			
+			List<Corso> corsi = this.model.getAllCorsiDelloStudente(matricola);
+        	
+        	for(Corso c: corsi) {
+        		txtResult.appendText(c.toString() + "\n");
+        		
+        	}
+		
+		} catch (NumberFormatException e) {
+			txtResult.appendText("Devi inserire una matricola (numero intero)");
+			return;
+		}
     }
 
+    /**
+     * Cliccando il tasto "Cerca Iscritti Corso" si ottengono
+     * tutti gli studenti iscritto al corso selezionato nel
+     * menu a tendina 
+     * 
+     * @param event
+     */
     @FXML
     void doCercaIscrittiCorso(ActionEvent event) {
-
+    	
+    	txtResult.clear();
+    	try {
+			
+    		Corso c = comboCorso.getValue();
+    		
+    		List<Studente> studenti = this.model.getAllStudentiIscrittiAlCorso(c);
+        	
+        	for(Studente s: studenti) {
+        		txtResult.appendText(s.toString() + "\n");
+        		
+        	}
+		} catch (Exception e) {
+			txtResult.appendText("Deve scegliere un corso!");
+		}
+       	
     }
 
     /**
@@ -94,30 +137,68 @@ public class SegreteriaStudentiController {
     	int matricola;
     	try {
 			matricola = Integer.parseInt(txtMatricola.getText());
+			Studente s = this.model.getStudente(matricola);
+	    	if(s == null) {
+	    		txtResult.appendText("La matricola inserita non esiste");
+	    		return;
+	    	}
+			txtNome.setText(s.getNome());
+			txtCognome.setText(s.getCognome());
+			
 		} catch (NumberFormatException e) {
 			txtResult.appendText("Devi inserire una matricola (numero intero)");
 			return;
 		}
-    
-    	Studente s = this.model.getStudente(matricola);
-    	if(s == null) {
-    		txtResult.appendText("La matricola inserita non esiste");
-    		return;
-    	}
-		txtNome.setText(s.getNome());
-		txtCognome.setText(s.getCognome());
-		
     	
     }
 
     @FXML
     void doIscrivi(ActionEvent event) {
 
+    	txtResult.clear();
+    	
+    	int matricola;
+    	try {
+    		
+			matricola = Integer.parseInt(txtMatricola.getText());
+			Studente s = this.model.getStudente(matricola);
+	    	if(s == null) {
+	    		txtResult.appendText("La matricola inserita non esiste");
+	    		return;
+	    	}
+	    	try {
+				
+	    		Corso c = comboCorso.getValue();
+	    		
+	    		if(model.isIscritto(c, matricola) == true) {
+	    			
+		    		txtResult.appendText("La matricola '"+s.getMatricola()+" "+ s.getNome()+" "+ s.getCognome()+"' è gia iscritta al corso '"+ c.getNome()+"'.\n");
+		    	} else {
+		    		model.iscriviStudenteAlCorso(s, c);
+		    		txtResult.appendText("Matricola '"+s.getMatricola()+" "+ s.getNome()+" "+ s.getCognome()+"' iscritta con successo");
+		    	}
+	    		
+			        	
+	        	
+			} catch (Exception e) {
+				txtResult.appendText("Deve scegliere un corso!");
+			}
+	    	
+			
+		} catch (NumberFormatException e) {
+			txtResult.appendText("Devi inserire una matricola (numero intero)");
+			return;
+		}
+    	
     }
 
     @FXML
     void doReset(ActionEvent event) {
-
+    	txtCognome.clear();
+    	txtMatricola.clear();
+    	txtNome.clear();
+    	txtResult.clear();
+    	comboCorso.getSelectionModel().clearSelection();
     }
 
     @FXML
