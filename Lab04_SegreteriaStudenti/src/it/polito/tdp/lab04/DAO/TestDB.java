@@ -7,10 +7,17 @@ public class TestDB {
 		/*
 		 * 	This is a main to check the DB connection
 		 */
-		
-		CorsoDAO cdao = new CorsoDAO();
-		cdao.getTuttiICorsi();
-
+		try {
+			CorsoDAO cdao = new CorsoDAO();
+//			cdao.getTuttiICorsi();
+			int matricola = Integer.parseInt("168889");
+			StudenteDAO sdao = new StudenteDAO();
+			sdao.getStudente(matricola);
+			System.out.println(sdao.getStudente(matricola));
+			System.out.println("testDB passato");
+		} catch (Exception e) {
+			System.err.println("TestDB fallito");
+		}
 	}
 
 }
